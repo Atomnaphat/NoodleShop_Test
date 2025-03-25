@@ -1,0 +1,126 @@
+<div class="card">
+    <div class="card-header">
+        <h3>Kitchen Orders</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Pending Orders</h4>
+                <div id="pendingOrders" class="list-group mb-3">
+                    <!-- Pending orders will be displayed here -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4>Cooking Orders</h4>
+                <div id="cookingOrders" class="list-group mb-3">
+                    <!-- Cooking orders will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const socket = io();
+let orders = [];
+
+function updateOrderLists() {
+    const pendingOrders = document.getElementById('pendingOrders');
+    const cookingOrders = document.getElementById('cookingOrders');
+
+    const pendingList = orders.filter(order => order.status === 'pending');
+    const cookingList = orders.filter(order => order.status === 'cooking');
+
+    pendingOrders.innerHTML = pendingList.map(order => `
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1">${order.noodleType}</h5>
+                    <small>Order ID: ${order._id}</small>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="startCooking('${order._id}')">
+                    Start Cooking
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    cookingOrders.innerHTML = cookingList.map(order => `
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1">${order.noodleType}</h5>
+                    <small>Order ID: ${order._id}</small>
+                </div>
+                <button class="btn btn-success btn-sm" onclick="completeOrder('${order._id}')">
+                    Mark as Ready
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function startCooking(orderId) {
+    try {
+        const response = await fetch(`/api/orders/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: 'cooking' })
+        });
+        
+        const updatedOrder = await response.json();
+        const index = orders.findIndex(o => o._id === orderId);
+        if (index !== -1) {
+            orders[index] = updatedOrder;
+            updateOrderLists();
+            socket.emit('orderReceived', updatedOrder);
+        }
+    } catch (error) {
+        console.error('Error updating order:', error);
+    }
+}
+
+async function completeOrder(orderId) {
+    try {
+        const response = await fetch(`/api/orders/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: 'ready' })
+        });
+        
+        const updatedOrder = await response.json();
+        const index = orders.findIndex(o => o._id === orderId);
+        if (index !== -1) {
+            orders[index] = updatedOrder;
+            updateOrderLists();
+            socket.emit('orderCompleted', updatedOrder);
+        }
+    } catch (error) {
+        console.error('Error completing order:', error);
+    }
+}
+
+// Socket event listeners
+socket.on('orderReceived', (order) => {
+    const index = orders.findIndex(o => o._id === order._id);
+    if (index !== -1) {
+        orders[index] = order;
+    } else {
+        orders.push(order);
+    }
+    updateOrderLists();
+});
+
+// Initial load of orders
+fetch('/api/orders')
+    .then(response => response.json())
+    .then(data => {
+        orders = data;
+        updateOrderLists();
+    })
+    .catch(error => console.error('Error loading orders:', error));
+</script> 

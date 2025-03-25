@@ -1,0 +1,77 @@
+<div class="card">
+    <div class="card-header">
+        <h3>Ready Orders</h3>
+    </div>
+    <div class="card-body">
+        <div id="readyOrders" class="list-group">
+            <!-- Ready orders will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<script>
+const socket = io();
+let orders = [];
+
+function updateOrderList() {
+    const readyOrders = document.getElementById('readyOrders');
+    const readyList = orders.filter(order => order.status === 'ready');
+
+    readyOrders.innerHTML = readyList.map(order => `
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1">${order.noodleType}</h5>
+                    <small>Order ID: ${order._id}</small>
+                </div>
+                <button class="btn btn-success btn-sm" onclick="markAsPaid('${order._id}')">
+                    Mark as Paid
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function markAsPaid(orderId) {
+    try {
+        const response = await fetch(`/api/orders/${orderId}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            // Remove the order from the local array
+            orders = orders.filter(o => o._id !== orderId);
+            updateOrderList();
+            // Emit event to notify other clients
+            socket.emit('orderPaid', { _id: orderId });
+        }
+    } catch (error) {
+        console.error('Error marking order as paid:', error);
+    }
+}
+
+// Socket event listeners
+socket.on('orderReady', (order) => {
+    const index = orders.findIndex(o => o._id === order._id);
+    if (index !== -1) {
+        orders[index] = order;
+    } else {
+        orders.push(order);
+    }
+    updateOrderList();
+});
+
+socket.on('orderRemoved', (order) => {
+    orders = orders.filter(o => o._id !== order._id);
+    updateOrderList();
+});
+
+// Initial load of orders
+fetch('/api/orders')
+    .then(response => response.json())
+    .then(data => {
+        orders = data;
+        updateOrderList();
+    })
+    .catch(error => console.error('Error loading orders:', error));
+</script> 
