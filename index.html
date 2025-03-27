@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noodle Shop Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page {
+            display: none;
+        }
+        .active-page {
+            display: block;
+        }
+        .menu-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .order-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-utensils"></i> Noodle Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('order')"><i class="fas fa-clipboard-list"></i> Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('chef')"><i class="fas fa-user-chef"></i> Chef</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('cashier')"><i class="fas fa-cash-register"></i> Cashier</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Order Page -->
+    <div id="order" class="page active-page">
+        <div class="container mt-4">
+            <h2><i class="fas fa-clipboard-list"></i> Place Your Order</h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Table Selection</h5>
+                            <div class="table-selection mb-4">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <select id="tableSelect" class="form-select mb-3">
+                                            <option value="">Select Table Number</option>
+                                            <option value="1">Table 1</option>
+                                            <option value="2">Table 2</option>
+                                            <option value="3">Table 3</option>
+                                            <option value="4">Table 4</option>
+                                            <option value="5">Table 5</option>
+                                            <option value="6">Table 6</option>
+                                            <option value="7">Table 7</option>
+                                            <option value="8">Table 8</option>
+                                            <option value="9">Table 9</option>
+                                            <option value="10">Table 10</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="card-title">Noodle Menu</h5>
+                            <div id="noodleMenu"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Your Order</h5>
+                            <div id="currentOrder"></div>
+                            <button class="btn btn-primary mt-3" onclick="submitOrder()">
+                                <i class="fas fa-paper-plane"></i> Submit Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chef Page -->
+    <div id="chef" class="page">
+        <div class="container mt-4">
+            <h2><i class="fas fa-user-chef"></i> Chef's Dashboard</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pending Orders</h5>
+                            <div id="pendingOrders" class="order-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cashier Page -->
+    <div id="cashier" class="page">
+        <div class="container mt-4">
+            <h2><i class="fas fa-cash-register"></i> Cashier Dashboard</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Completed Orders</h5>
+                            <div id="completedOrders" class="order-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Item Customization Modal -->
+    <div class="modal fade" id="menuItemModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customize Your Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Soup Type</h6>
+                            <div id="soupTypeOptions" class="mb-3"></div>
+                            
+                            <h6>Noodle Type</h6>
+                            <div id="noodleTypeOptions" class="mb-3"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Add Extra</h6>
+                            <div id="extraOptions" class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="selected-items mt-3">
+                        <h6>Selected Items</h6>
+                        <div id="selectedItemsList"></div>
+                        <div class="total-price mt-3">
+                            Total: <span id="modalTotalPrice">0</span> baht
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addCustomizedOrder()">Add to Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

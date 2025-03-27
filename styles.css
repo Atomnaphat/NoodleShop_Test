@@ -1,0 +1,471 @@
+/* Premium Color Variables */
+:root {
+    --premium-dark: #1e3932;
+    --premium-gold: #c6a96d;
+    --premium-cream: #f9f6f1;
+    --premium-light: #f3ebe3;
+    --premium-accent: #006241;
+}
+
+/* Base Styles */
+body {
+    background-color: var(--premium-cream);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--premium-dark);
+    line-height: 1.4;
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--premium-dark);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    color: var(--premium-gold) !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Menu Items */
+.menu-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.menu-item h5 {
+    color: var(--premium-dark);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.price {
+    color: var(--premium-gold);
+    font-weight: 600;
+}
+
+/* Extras Section */
+.extras-section {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--premium-light);
+}
+
+.extras-title {
+    font-size: 0.9em;
+    color: var(--premium-dark);
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.extras-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.9em;
+}
+
+.extras-item .price {
+    font-size: 0.9em;
+    color: var(--premium-accent);
+}
+
+.extras-item:hover {
+    background-color: var(--premium-light);
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin: 0 -8px;
+}
+
+/* Order Display */
+.main-dish-item {
+    background: var(--premium-light);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.main-dish-item .extras-list {
+    margin-top: 5px;
+    padding-left: 15px;
+    font-size: 0.9em;
+    color: var(--premium-muted);
+}
+
+.main-dish-item .extras-list li {
+    list-style-type: none;
+    position: relative;
+}
+
+.main-dish-item .extras-list li:before {
+    content: "+";
+    position: absolute;
+    left: -12px;
+    color: var(--premium-accent);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--premium-accent);
+    border-color: var(--premium-accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--premium-dark);
+    border-color: var(--premium-dark);
+}
+
+/* Order Section */
+.order-section {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.order-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Section Headers */
+h3 {
+    color: var(--premium-dark);
+    font-weight: 600;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--premium-gold);
+}
+
+/* Total Price */
+.total-price {
+    color: var(--premium-accent);
+    font-size: 1.2em;
+    font-weight: 700;
+    padding-top: 10px;
+    border-top: 1px solid var(--premium-light);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container { padding: 10px; }
+    .menu-item { padding: 12px; }
+    h3 { font-size: 1.3em; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--premium-gold);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--premium-light);
+}
+
+/* Page Navigation */
+.page {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.active-page {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Order Display */
+.order-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.order-list::-webkit-scrollbar-track {
+    background: var(--premium-light);
+}
+
+.order-list::-webkit-scrollbar-thumb {
+    background: var(--premium-gold);
+    border-radius: 4px;
+}
+
+.order-list::-webkit-scrollbar-thumb:hover {
+    background: var(--premium-dark);
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Order Items */
+.order-items {
+    margin: 15px 0;
+}
+
+.order-items > div {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-items > div:last-child {
+    border-bottom: none;
+}
+
+/* Icons */
+.fas {
+    margin-right: 5px;
+}
+
+/* Chef's Dashboard Note Paper Style */
+.chef-order-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    background: linear-gradient(to bottom, #fff 0%, #f9f9f9 100%);
+}
+
+.chef-order-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #ffd700;
+    border-radius: 8px 8px 0 0;
+}
+
+.chef-order-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to right, rgba(0,0,0,0.05) 0%, transparent 100%);
+    border-radius: 8px 0 0 8px;
+}
+
+.chef-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed #ddd;
+}
+
+.chef-order-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.chef-order-time {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.chef-order-table {
+    background: #ffd700;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.chef-order-items {
+    margin: 15px 0;
+}
+
+.chef-order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dotted #ddd;
+}
+
+.chef-order-item:last-child {
+    border-bottom: none;
+}
+
+.chef-order-total {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px dashed #ddd;
+    text-align: right;
+    font-weight: bold;
+}
+
+.chef-order-actions {
+    margin-top: 15px;
+    text-align: right;
+}
+
+/* Pin effect */
+.chef-order-card::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Hover effect */
+.chef-order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+
+/* Order Display Styles */
+.order-section:not(:last-child) {
+    border-bottom: 1px dashed #dee2e6;
+    padding-bottom: 15px;
+}
+
+/* Total price section */
+.border-top {
+    border-top: 2px solid #dee2e6 !important;
+}
+
+/* Drinks Menu Styles */
+.drinks-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.drinks-section h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.drinks-section h3 i {
+    color: #17a2b8;
+    margin-right: 10px;
+}
+
+.drink-item {
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.drink-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.drink-item h5 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+    color: white;
+}
+
+/* Make drinks section responsive */
+@media (max-width: 768px) {
+    .drinks-section {
+        padding: 15px;
+    }
+    
+    .drink-item {
+        margin-bottom: 10px;
+    }
+}
+
+/* Section Headers */
+h3 i {
+    margin-right: 10px;
+    color: #3498db;
+}
+
+/* Divider */
+hr.my-4 {
+    border-top: 2px solid #eee;
+    margin: 2rem 0;
+} 
