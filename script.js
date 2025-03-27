@@ -36,7 +36,24 @@ let customizationState = {
 };
 
 // Socket.io connection
-const socket = io('http://localhost:8000');
+const socket = io(window.CONFIG.SOCKET_URL, {
+    path: '/socket.io',
+    transports: ['websocket', 'polling'],
+    secure: true,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000
+});
+
+// Add connection status indicator
+const connectionStatus = document.createElement('div');
+connectionStatus.style.position = 'fixed';
+connectionStatus.style.bottom = '10px';
+connectionStatus.style.right = '10px';
+connectionStatus.style.padding = '5px 10px';
+connectionStatus.style.borderRadius = '5px';
+connectionStatus.style.fontSize = '12px';
+document.body.appendChild(connectionStatus);
 
 // Page navigation
 function showPage(pageId) {
@@ -394,19 +411,49 @@ function submitOrder() {
 
 // Socket.io event handlers
 socket.on('connect', () => {
-    console.log('Connected to server');
+    console.log('Connected to server:', window.CONFIG.SOCKET_URL);
+    connectionStatus.textContent = 'Connected to server';
+    connectionStatus.style.backgroundColor = '#28a745';
+    connectionStatus.style.color = 'white';
+    // Immediately fetch orders when connected
+    updateOrdersDisplay();
+});
+
+socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+    connectionStatus.textContent = 'Disconnected from server';
+    connectionStatus.style.backgroundColor = '#dc3545';
+    connectionStatus.style.color = 'white';
+});
+
+socket.on('connect_error', (error) => {
+    console.error('Connection error:', error);
+    connectionStatus.textContent = 'Connection error';
+    connectionStatus.style.backgroundColor = '#ffc107';
+    connectionStatus.style.color = 'black';
 });
 
 socket.on('orderStatusUpdate', (order) => {
+    console.log('Order status updated:', order);
+    updateOrdersDisplay();
+});
+
+socket.on('newOrder', (order) => {
+    console.log('New order received:', order);
     updateOrdersDisplay();
 });
 
 // Update orders display for chef and cashier
 function updateOrdersDisplay() {
+    console.log('Updating orders display');
+    
     // Update pending orders for chef
     const pendingOrders = document.getElementById('pendingOrders');
     if (pendingOrders) {
         socket.emit('getPendingOrders', (orders) => {
+            console.log('Received pending orders:', orders);
+            if (!orders) return; // Guard against undefined orders
+            
             pendingOrders.innerHTML = orders.map(order => `
                 <div class="chef-order-card">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -443,6 +490,9 @@ function updateOrdersDisplay() {
     const completedOrders = document.getElementById('completedOrders');
     if (completedOrders) {
         socket.emit('getCompletedOrders', (orders) => {
+            console.log('Received completed orders:', orders);
+            if (!orders) return; // Guard against undefined orders
+            
             completedOrders.innerHTML = orders.map(order => `
                 <div class="card mb-3">
                     <div class="card-body">
@@ -475,6 +525,9 @@ function updateOrdersDisplay() {
         });
     }
 }
+
+// Auto-refresh orders every 30 seconds
+setInterval(updateOrdersDisplay, 30000);
 
 // Mark order as complete
 function markOrderComplete(orderId) {
