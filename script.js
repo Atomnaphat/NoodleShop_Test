@@ -36,10 +36,8 @@ let customizationState = {
 };
 
 // Socket.io connection
-const socket = io(window.CONFIG.SOCKET_URL, {
-    path: '/socket.io',
+const socket = io('http://localhost:8000', {
     transports: ['websocket', 'polling'],
-    secure: true,
     reconnection: true,
     reconnectionAttempts: 5,
     reconnectionDelay: 1000
@@ -411,7 +409,7 @@ function submitOrder() {
 
 // Socket.io event handlers
 socket.on('connect', () => {
-    console.log('Connected to server:', window.CONFIG.SOCKET_URL);
+    console.log('Connected to server');
     connectionStatus.textContent = 'Connected to server';
     connectionStatus.style.backgroundColor = '#28a745';
     connectionStatus.style.color = 'white';
